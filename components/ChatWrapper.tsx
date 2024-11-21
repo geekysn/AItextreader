@@ -1,24 +1,23 @@
 "use client"
 
-import { useChat } from 'ai/react'
+import { Message, useChat } from 'ai/react'
 import React from 'react'
 import { json } from 'stream/consumers'
 import Messages from './Messages'
+import ChatInput from './ChatInput'
 
-const ChatWrapper = ({sessionId}:{sessionId:string}) => {
-    const { messages, handleInputChange, handleSubmit, input } = useChat({
+const ChatWrapper = ({sessionId, initialMessages}:{sessionId:string, initialMessages: Message[]}) => {
+    const { messages, handleInputChange, handleSubmit, input, setInput } = useChat({
         api: "/api/chat-stream",
         body: { sessionId },
+        initialMessages,
     })
   return (
     <div className='relative min-h-full bg-zinc-900 flex divide-y divide-zinc-700 flex-col justify-between gap-2'>
         <div className='flex-1 text-black bg-zinc-800 justify-between flex flex-col'>
             <Messages messages={messages}/>
         </div>
-        <form action="" onSubmit={handleSubmit}>
-            <input className='text-black' value={input} onChange={handleInputChange} type="text" />
-            <button type="submit">Send</button> 
-        </form>
+        <ChatInput handleInputChange={handleInputChange} handleSubmit={handleSubmit} input={input} setInput={setInput}/>
     </div>
   )
 }
